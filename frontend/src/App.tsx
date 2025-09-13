@@ -231,8 +231,13 @@ function App() {
               {urgent && <span className="badge badge-urgent">urgent</span>}
               {overdue && <span className="badge badge-overdue">overdue</span>}
             </div>
-            <div className="row2">
-              {tt.deadline && <span className="deadline">⏰ {formatDeadline(tt.deadline)}</span>}
+              <div className="row2">
+              {/* show deadline if it has otherwise no */}
+              {"deadline" in tt && (
+                <span className="deadline">
+                  {tt.deadline ? `⏰ ${formatDeadline(tt.deadline)}` : "— No deadline"}
+                </span>
+              )}
               <span className="date">{new Date(t.created_at).toLocaleString()}</span>
             </div>
           </div>
