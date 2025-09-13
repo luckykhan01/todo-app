@@ -34,6 +34,7 @@ Checklist для поэтапного выполнения задания:
 3. Список всех задач на экране.
 4. CSS для стилизации интерфейса.
 5. Значки или цвета для обозначения выполненных и невыполненных задач.
+
 Бонусная часть (10 баллов):
 1. Адаптивная верстка (чтобы корректно смотрелось при изменении размера окна).
 2. Возможность переключения светлой/тёмной темы.
@@ -42,6 +43,7 @@ Checklist для поэтапного выполнения задания:
 Основная часть (10 баллов):
 1. Функционал добавления новой задачи в список.
 2. Валидация ввода (проверка на пустой ввод).
+
 Бонусная часть (10 баллов):
 1. Задачи с датой и временем выполнения.
 2. Приоритеты задачи (низкий, средний, высокий).
@@ -49,6 +51,7 @@ Checklist для поэтапного выполнения задания:
 ### 3) Удаление задач (15/15 баллов)
 Основная часть (5 баллов):
 1. Удаление задач из списка.
+
 Бонусная часть (10 баллов):
 1. Подтверждение удаления задачи (модальное окно).
 
@@ -56,6 +59,7 @@ Checklist для поэтапного выполнения задания:
 Основная часть (10 баллов):
 1. Отметка задачи как выполненной.
 2. Зачеркивание текста выполненных задач.
+
 Бонусная часть (20 баллов):
 1. Перемещение выполненных задач в отдельный раздел «Выполненные задачи».
 2. Отмена отметки выполнения задачи (возврат в «Активные задачи»).
@@ -69,6 +73,7 @@ Checklist для поэтапного выполнения задания:
 Основная часть (10 баллов):
 1. Фильтрация задач по статусу (все / активные / выполненные).
 2. Сортировка по дате добавления.
+
 Бонусная часть (10 баллов):
 1. Сортировка по приоритету.
 2. Фильтрация по дате (сегодня / на неделю / просроченные).
@@ -77,8 +82,8 @@ Checklist для поэтапного выполнения задания:
 
 Before running the application, ensure you have the following installed:
 
-- [Go](https://golang.org/doc/install) (version **1.21+**)
-- [Node.js](https://nodejs.org/) (version **18+**)
+- [Go](https://golang.org/doc/install) (version **1.23**)
+- [Node.js](https://nodejs.org/) (version **22.15.0**)
 - [Wails CLI](https://wails.io/docs/gettingstarted/installation)
 
 > Tip: After installing, run `wails doctor` to verify your environment.
@@ -92,8 +97,6 @@ Follow these steps to set up and run the application:
    ```bash
    git clone https://github.com/luckykhan01/todo-app.git
    cd todo_app
-   and into workspace
-   cd todo-app
    ```
 
 2. **Install Dependencies**:
@@ -110,6 +113,11 @@ Follow these steps to set up and run the application:
      cd frontend
      npm install
      cd ..
+     ```
+
+   - Install Wails CLI 
+     ```bash
+     go install github.com/wailsapp/wails/v2/cmd/wails@latest
      ```
 
 3. **Run in Development Mode**:
@@ -134,6 +142,15 @@ Follow these steps to set up and run the application:
 
 ## Project Structure
 
-- **`/frontend`**: Contains the React frontend code.
-- **`/go`**: Contains the Go backend code, including:
-  - `app.go`: Defines the main application structure and methods.
+- **`/frontend`**: UI на React
+  - `src/App.tsx`: основной интерфейс — ввод/добавление задач, отметка выполнения/снятие, удаление (модальное подтверждение), фильтры (статус/даты), сортировки (дата/приоритет/дедлайн), переключатель светлая/тёмная тема, вывод дедлайна и приоритета.
+  - `src/App.css`: стили приложения, CSS-переменные темы, бейджи приоритета, метки
+  - `src/types.ts`: типы данных фронтенда (Task, Priority и др.)
+  - `JSON`: tasks.json
+- **`main.go`**: запуск Wails-приложения, инициализация и привязка сервисов к фронту
+- **`todo.go`**: доменный сервис TodoService и локальное хранилище
+  - `methods`: List, Add, Toggle, Delete
+  - `task fields`: deadline, priority, created_at, completed
+  - `deadline parsing`: (RFC3339 / YYYY-MM-DD[THH:MM])
+  - `JSON`: tasks.json
+
