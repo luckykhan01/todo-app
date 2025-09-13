@@ -1,26 +1,38 @@
 :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
-.container { max-width: 720px; margin: 32px auto; padding: 0 16px; }
+.container { max-width: 820px; margin: 32px auto; padding: 0 16px; }
 h1 { margin: 0 0 16px; }
 
-.addRow { display: flex; gap: 8px; }
-.addRow input {
-  flex: 1; padding: 10px 12px; border: 1px solid #ccc; border-radius: 8px;
+.addRow { display: grid; grid-template-columns: 1fr auto auto auto auto; gap: 8px; }
+.addRow input[type="text"], .addRow input:not([type]), .addRow input[type="date"], .addRow input[type="time"], .addRow select {
+  padding: 10px 12px; border: 1px solid #ccc; border-radius: 8px;
 }
-.addRow button {
-  padding: 10px 16px; border: none; border-radius: 8px; cursor: pointer;
-}
+.addRow button { padding: 10px 16px; border: none; border-radius: 8px; cursor: pointer; }
 .error { color: #b00020; margin-top: 6px; }
 
-.toolbar { display: flex; gap: 16px; margin: 16px 0; align-items: center; }
+.toolbar { display: flex; gap: 16px; margin: 16px 0; align-items: center; flex-wrap: wrap; }
 .filters, .sort { display: flex; align-items: center; }
 select { padding: 6px 8px; }
 
 .list { list-style: none; padding: 0; margin: 0; }
-.item { display: grid; grid-template-columns: 24px 1fr auto; gap: 10px; align-items: center; }
+.item { display: grid; grid-template-columns: 24px 1fr; gap: 10px; align-items: center; }
 li { display: grid; grid-template-columns: 1fr auto; align-items: center;
      padding: 10px 12px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 8px; }
-.title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
 .date { font-size: 12px; opacity: 0.7; }
+.deadline { font-size: 12px; margin-right: 12px; }
 li.done .title { text-decoration: line-through; opacity: .6; }
 .delete { border: none; background: transparent; font-size: 20px; line-height: 1; cursor: pointer; }
 .empty { padding: 24px; text-align: center; color: #666; }
+
+.meta { display: flex; flex-direction: column; gap: 4px; }
+.row1 { display: flex; align-items: center; gap: 8px; }
+.row2 { display: flex; align-items: center; gap: 12px; opacity: .8; }
+
+/* бейджи приоритета */
+.prio {
+  font-size: 11px; text-transform: uppercase; letter-spacing: .4px;
+  padding: 2px 6px; border-radius: 999px; border: 1px solid #ddd;
+}
+.prio-low { background: #eef9f0; }
+.prio-medium { background: #fff6e6; }
+.prio-high { background: #ffe9e9; }

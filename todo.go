@@ -13,11 +13,34 @@ import (
 	"time"
 )
 
+// adding Priority function
+type Priority string
+
+const (
+	PriorityLow    Priority = "low"
+	PriorityMedium Priority = "medium"
+	PriorityHigh   Priority = "high"
+)
+
+func normalizePriority(p string) Priority {
+	switch strings.ToLower(strings.TrimSpace(p)) {
+	case string(PriorityLow):
+		return PriorityLow
+	case string(PriorityHigh):
+		return PriorityHigh
+	default:
+		return PriorityMedium // po defaultu
+	}
+}
+
 type Task struct {
 	ID        string    `json:"id"`
 	Title     string    `json:"title"`
 	CreatedAt time.Time `json:"created_at"`
 	Completed bool      `json:"completed"`
+	// new parts:
+	Deadline *time.Time `json:"deadline,omitempty"`
+	Priority Priority   `json:"priority"`
 }
 
 type storage struct {
@@ -57,7 +80,6 @@ func (s *storage) Load() ([]Task, error) {
 }
 
 func (s *storage) Save(tasks []Task) error {
-	// чтобы файл всегда был валидным
 	tmp := s.path + ".tmp"
 	b, err := json.MarshalIndent(tasks, "", "  ")
 	if err != nil {
@@ -75,7 +97,6 @@ func genID() string {
 	return hex.EncodeToString(b)
 }
 
-// сервис который мы зальем во фронтенд
 type TodoService struct {
 	ctx     context.Context
 	storage *storage
@@ -88,10 +109,8 @@ func NewTodoService() (*TodoService, error) {
 		return nil, err
 	}
 	ts := &TodoService{storage: st, tasks: []Task{}}
-	// загрузим состояние при старте
 	if loaded, err := st.Load(); err == nil {
 		ts.tasks = loaded
-		// гарантируем сортировку по дате добавления (самые новые сверху)
 		sort.Slice(ts.tasks, func(i, j int) bool {
 			return ts.tasks[i].CreatedAt.After(ts.tasks[j].CreatedAt)
 		})
@@ -101,26 +120,53 @@ func NewTodoService() (*TodoService, error) {
 
 func (t *TodoService) startup(ctx context.Context) { t.ctx = ctx }
 
-// возвращает все задачи (фронт уже сам отфильтрует/отсортирует при необходимости)
 func (t *TodoService) List() []Task { return t.tasks }
 
-// добавляет задачу, валидация на пустой ввод
-func (t *TodoService) Add(title string) (Task, error) {
+// теперь принимает дедлайн и приоритет
+func (t *TodoService) Add(title string, deadlineISO string, priority string) (Task, error) {
 	if strings.TrimSpace(title) == "" {
 		return Task{}, errors.New("title cannot be empty")
 	}
+
+	var dl *time.Time
+	if strings.TrimSpace(deadlineISO) != "" {
+		// пробуем несколько форматов на всякий случай
+		var parsed time.Time
+		var err error
+		formats := []string{
+			time.RFC3339,       // 2025-09-12T15:04:05Z07:00
+			"2006-01-02T15:04", // локальная без зоны
+			"2006-01-02 15:04", // с пробелом
+			"2006-01-02",       // только дата
+		}
+		for _, f := range formats {
+			if p, e := time.Parse(f, deadlineISO); e == nil {
+				parsed = p
+				err = nil
+				break
+			} else {
+				err = e
+			}
+		}
+		if err != nil {
+			return Task{}, errors.New("invalid deadline format (use RFC3339 or YYYY-MM-DD[THH:MM])")
+		}
+		dl = &parsed
+	}
+
 	task := Task{
 		ID:        genID(),
 		Title:     strings.TrimSpace(title),
 		CreatedAt: time.Now(),
 		Completed: false,
+		Deadline:  dl,
+		Priority:  normalizePriority(priority),
 	}
-	t.tasks = append([]Task{task}, t.tasks...) // добавляем в начало
+	t.tasks = append([]Task{task}, t.tasks...)
 	_ = t.storage.Save(t.tasks)
 	return task, nil
 }
 
-// отмечает выполненность
 func (t *TodoService) Toggle(id string) (bool, error) {
 	for i := range t.tasks {
 		if t.tasks[i].ID == id {
