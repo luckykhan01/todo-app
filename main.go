@@ -19,7 +19,7 @@ func main() {
 	}
 
 	if err := wails.Run(&options.App{
-		Title:     "Wails Todo",
+		Title:     "To-do List",
 		Width:     960,
 		Height:    700,
 		OnStartup: svc.startup,

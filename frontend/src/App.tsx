@@ -7,6 +7,8 @@ type Filter = "all" | "active" | "done";
 type Sort = "newest" | "oldest" | "priority" | "deadline";
 type Priority = "low" | "medium" | "high";
 type DateFilter = "any" | "today" | "week" | "overdue";
+type Theme = "light" | "dark";
+
 
 type TaskExt = Task & {
   deadline?: string | null;
@@ -51,6 +53,15 @@ function App() {
   const [sort, setSort] = useState<Sort>("newest");
   const [dateFilter, setDateFilter] = useState<DateFilter>("any");
   const [error, setError] = useState<string | null>(null);
+  // system or saved
+  const systemPrefersDark = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem("theme") as Theme) || (systemPrefersDark ? "dark" : "light"));
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
 
   // модалка удаления
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -268,6 +279,12 @@ function App() {
       {error && <div className="error">{error}</div>}
 
       <div className="toolbar">
+        <div style={{ marginLeft: "auto" }}>
+          <button onClick={() => setTheme(t => (t === "dark" ? "light" : "dark"))}>
+          {theme === "dark" ? "Light theme" : "Dark theme"}
+          </button>
+        </div>
+
         <div className="filters">
           <label>Filter:&nbsp;</label>
           <select value={filter} onChange={(e) => setFilter(e.target.value as Filter)}>

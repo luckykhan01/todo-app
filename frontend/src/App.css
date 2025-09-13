@@ -90,3 +90,106 @@ li.done .title { text-decoration: line-through; opacity: .6; }
 .modal .actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
 .modal button { padding: 8px 12px; border-radius: 8px; border: 1px solid #ddd; background: #f5f5f5; cursor: pointer; }
 .modal button.primary { background: #e53935; color: #fff; border-color: #e53935; }
+
+:root {
+  /* Light (по умолчанию) */
+  --bg: #f6f8fc;
+  --card: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #e5e7eb;
+  --input-bg: #ffffff;
+
+  /* priority badges — light */
+  --prio-high-bg: #ffe2e2;
+  --prio-high-border: #ffb3b3;
+  --prio-high-text: #b91c1c;
+
+  --prio-medium-bg: #fff1c2;
+  --prio-medium-border: #ffd166;
+  --prio-medium-text: #a16207;
+
+  --prio-low-bg: #dcfce7;
+  --prio-low-border: #86efac;
+  --prio-low-text: #166534;
+}
+
+/* Dark overrides */
+:root[data-theme="dark"]{
+  --bg: #0f172a;       /* slate-900 */
+  --card: #111827;     /* gray-900 */
+  --text: #e5e7eb;     /* gray-200 */
+  --muted: #9ca3af;    /* gray-400 */
+  --border: #1f2937;   /* gray-800 */
+  --input-bg: #0b1220;
+
+  /* priority badges — dark */
+  --prio-high-bg: rgba(239,68,68,.15);
+  --prio-high-border: #ef4444;
+  --prio-high-text: #fecaca;
+
+  --prio-medium-bg: rgba(245,158,11,.18);
+  --prio-medium-border: #f59e0b;
+  --prio-medium-text: #fde68a;
+
+  --prio-low-bg: rgba(16,185,129,.18);
+  --prio-low-border: #10b981;
+  --prio-low-text: #bbf7d0;
+}
+
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--text); }
+.container { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding-top: 16px; }
+
+.addRow input[type="text"], .addRow input:not([type]), .addRow input[type="date"], .addRow input[type="time"], .addRow select {
+  background: var(--input-bg);
+  color: var(--text);
+  border-color: var(--border);
+}
+.addRow button { background: var(--input-bg); color: var(--text); border: 1px solid var(--border); }
+
+.list li { border-color: var(--border); background: transparent; }
+.row2, .date, .deadline { color: var(--muted); }
+
+.prio { font-weight: 600; border: 1px solid var(--border); }
+.prio-high   { background: var(--prio-high-bg);   border-color: var(--prio-high-border);   color: var(--prio-high-text); }
+.prio-medium { background: var(--prio-medium-bg); border-color: var(--prio-medium-border); color: var(--prio-medium-text); }
+.prio-low    { background: var(--prio-low-bg);    border-color: var(--prio-low-border);    color: var(--prio-low-text); }
+
+html, body, #root, #app, .App {
+  background: var(--bg) !important;
+}
+
+#wails-titlebar, .wails-titlebar, .titlebar, .titlebar-drag-region {
+  background: var(--bg) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.addRow select,
+.toolbar select,
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: var(--input-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: none;             
+  outline: none;
+}
+
+:root { --focus: #3b82f6; }     
+.addRow select:focus,
+.toolbar select:focus,
+.addRow input:focus,
+.toolbar select:focus-visible {
+  border-color: var(--focus);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--focus) 20%, transparent);
+}
+
+:root[data-theme="dark"] .addRow select:focus,
+:root[data-theme="dark"] .toolbar select:focus {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--focus) 14%, transparent);
+}
