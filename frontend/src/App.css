@@ -36,3 +36,57 @@ li.done .title { text-decoration: line-through; opacity: .6; }
 .prio-low { background: #eef9f0; }
 .prio-medium { background: #fff6e6; }
 .prio-high { background: #ffe9e9; }
+
+/* сделать бейджи контрастными на тёмном фоне */
+.prio { 
+  font-weight: 600;
+  border-width: 1px;
+}
+
+/* HIGH — красный */
+.prio-high {
+  background: #ffe2e2;     
+  border-color: #ffb3b3;    
+  color: #b91c1c;           
+}
+
+/* MEDIUM — жёлто-оранжевый */
+.prio-medium {
+  background: #fff1c2;      
+  border-color: #ffd166;    
+  color: #a16207;           
+}
+
+/* LOW — зелёный */
+.prio-low {
+  background: #dcfce7;
+  border-color: #86efac;
+  color: #166534;
+}
+
+
+/* --- секции активных/выполненных --- */
+.section { margin: 12px 0; }
+.section h3 { margin: 12px 0 8px; font-size: 13px; color: #666; text-transform: uppercase; letter-spacing: .4px; }
+
+/* --- бейджи срочно/просрочено --- */
+.badge {
+  font-size: 11px; text-transform: uppercase; letter-spacing: .4px;
+  padding: 2px 6px; border-radius: 999px; border: 1px solid #ddd;
+}
+.badge-urgent { background: #ffe9e9; color: #b00020; border-color: #ffcdcd; }
+.badge-overdue { background: #fff1f1; color: #d52525; border-color: #ffd6d6; }
+
+/* --- модалка подтверждения удаления --- */
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,.45);
+  display: flex; align-items: center; justify-content: center; z-index: 9999;
+}
+.modal {
+  background: #fff; color: #111; border: 1px solid #eee;
+  width: min(420px, 92vw); padding: 16px; border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+}
+.modal .actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+.modal button { padding: 8px 12px; border-radius: 8px; border: 1px solid #ddd; background: #f5f5f5; cursor: pointer; }
+.modal button.primary { background: #e53935; color: #fff; border-color: #e53935; }
