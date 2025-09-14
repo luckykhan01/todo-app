@@ -16,6 +16,9 @@ Desktop приложение «To-Do List» на **Go + Wails v2 + React (TypeSc
 ## Video Link
 https://drive.google.com/file/d/1wnw2GTZTzliOjCAwZmdUCW1nkcTFOoTz/view?usp=share_link
 
+## CV
+https://drive.google.com/file/d/10rCVrM_2hSR-Yevfw8GCxa5nn9smy0F8/view?usp=share_link
+
 ## Building
 
 To build a redistributable, production mode package, use `wails build`.
